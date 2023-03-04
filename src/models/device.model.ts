@@ -40,7 +40,7 @@ class DeviceModel {
     async create(body:IDeviceCreation) {
       return (
         await pool.query(
-          `INSERT INTO devices (name,price,img,brand_id,type_id) VALUES ('${body.name}',${body.price}, ${body.brand_id},${body.type_id}) RETURNING id, name;`
+          `INSERT INTO devices (name,price,img,brand_id,type_id) VALUES ('${body.name}',${body.price}, ${body.brand_id},${body.type_id}) RETURNING id, name,price,img,brand_id,type_id;`
         )
       ).rows[0];
     }

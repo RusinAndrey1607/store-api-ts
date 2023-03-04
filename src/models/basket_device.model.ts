@@ -1,23 +1,27 @@
 import { pool } from "../db/db";
 
-// class BasketDeviceModel {
-//   async createTable() {
-//     await pool.query(`CREATE TABLE IF NOT EXISTS basket_devices(
-//             id SERIAL PRIMARY KEY,
-//             user_id INT UNIQUE,
-//             FOREIGN KEY(user_id) REFERENCES basket_devices ON DELETE CASCADE
-//         );`);
-//     return;
-//   }
-//   async delete(user_id: number) {
-//     return await pool.query(`DELETE FROM basket_devices WHERE user_id = ${user_id};`);
-//   }
-//   async create(user_id:number) {
-//     return (
-//       await pool.query(
-//         `INSERT INTO baskets (user_id) VALUES (${user_id}) RETURNING id, user_id;`
-//       )
-//     ).rows[0];
-//   }
-// }
-// export const BasketDevice = new BasketDeviceModel();
+class BasketDeviceModel {
+  async createTable() {
+    await pool.query(`CREATE TABLE IF NOT EXISTS basket_devices(
+            id SERIAL PRIMARY KEY,
+            basket_id INT UNIQUE,
+            device_id INT,
+            FOREIGN KEY(basket_id) REFERENCES baskets ON DELETE CASCADE,
+            FOREIGN KEY(device_id) REFERENCES devices ON DELETE CASCADE
+        );`);
+    return;
+  }
+  async delete(device_id: number) {
+    return await pool.query(
+      `DELETE FROM basket_devices WHERE device_id = ${device_id};`
+    );
+  }
+  async create(body: { device_id: number; basket_id: number }) {
+    return (
+      await pool.query(
+        `INSERT INTO baskets (device_id,basket_id) VALUES (${body.device_id},${body.basket_id}) RETURNING id, basket_id,device_id;`
+      )
+    ).rows[0];
+  }
+}
+export const BasketDevice = new BasketDeviceModel();
