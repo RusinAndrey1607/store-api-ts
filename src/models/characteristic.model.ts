@@ -9,9 +9,10 @@ class CharacteristicModel {
     return;
   }
   async delete(id: number) {
-    return await pool.query(
-      `DELETE FROM characteristics WHERE id = ${id};`
-    );
+    return await pool.query(`DELETE FROM characteristics WHERE id = ${id};`);
+  }
+  async findAll() {
+    return (await pool.query(`SELECT *  FROM characteristics;`)).rows;
   }
   async create(characteristic_name: string) {
     return (

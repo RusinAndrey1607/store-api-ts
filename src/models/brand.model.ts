@@ -18,7 +18,7 @@ class BrandModel {
       return await pool.query(`SELECT id,name FROM brands;`);
     }
   
-    async create(name: number) {
+    async create(name: string) {
       return (
         await pool.query(
           `INSERT INTO brands (name) VALUES ('${name}') RETURNING id, name;`

@@ -18,7 +18,7 @@ class TypeModel {
     return await pool.query(`SELECT id,name FROM types;`);
   }
 
-  async create(name: number) {
+  async create(name: string) {
     return (
       await pool.query(
         `INSERT INTO types (name) VALUES ('${name}') RETURNING id, name;`

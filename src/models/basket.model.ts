@@ -12,12 +12,16 @@ class BasketModel {
   async delete(user_id: number) {
     return await pool.query(`DELETE FROM baskets WHERE user_id = ${user_id};`);
   }
-  async create(user_id:number) {
+  async create(user_id: number) {
     return (
       await pool.query(
         `INSERT INTO baskets (user_id) VALUES (${user_id}) RETURNING id, user_id;`
       )
     ).rows[0];
+  }
+  async findByUserId(user_id: number) {
+    return (await pool.query(`SELECT * FROM basket WHERE user_id = ${user_id}`))
+      .rows[0];
   }
 }
 export const Basket = new BasketModel();

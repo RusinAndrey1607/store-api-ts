@@ -1,11 +1,14 @@
 import { Router } from "express"
-// const deviceController = require("../controllers/deviceController")
+import { deviceController } from "../controllers/deviceController"
 // const roleMiddleware = require("../middlewares/roleMiddleware")
 
 
 export const deviceRouter = Router()
 
 // router.post("/",roleMiddleware("ADMIN"), deviceController.create)
-// router.get("/", deviceController.getAll)
-// router.get("/:id", deviceController.getOne)
+deviceRouter.post("/", deviceController.create)
+deviceRouter.get("/", deviceController.getAll)
+deviceRouter.get("/:id", deviceController.getOne)
+deviceRouter.put("/", deviceController.update)
+deviceRouter.delete("/:id", deviceController.delete)
 
