@@ -1,14 +1,16 @@
 import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+
 export interface UserRequest extends Request {
   user: {
     role: string;
     email: string;
     id: number;
-    basket_id:number
+    basket_id: number;
   };
 }
 export const AuthMiddleware = (
-  req: UserRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -21,11 +23,13 @@ export const AuthMiddleware = (
     if (!token) {
       return res.status(401).json({ message: "User isn't authorized" });
     }
-    // @ts-ignore
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "JWT_SECRET");
+    // @ts-ignore
     req.user = decoded;
     next();
   } catch (error) {
+    console.log(error);
+
     return res.status(401).json({ message: "User isn't authorized" });
   }
 };

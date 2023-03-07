@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import path from "path";
-import uuid from "uuid";
+import { v4 } from "uuid";
 import { Device } from "../models/device.model";
 import { ApiError } from "../error/ApiError";
 import { unlink } from "fs";
@@ -10,8 +10,7 @@ class DeviceController {
       let { name, price, brand_id, type_id } = req.body;
       // @ts-ignore
       const { img } = req.files;
-      let fileName = uuid.v4() + ".jpg";
-      img.mv(path.resolve(__dirname, "..", "static", fileName));
+      let fileName = v4() + ".jpg";
       const device = await Device.create({
         name,
         price,
@@ -19,10 +18,12 @@ class DeviceController {
         type_id,
         img: fileName,
       });
+      img.mv(path.resolve(__dirname, "..", "static", fileName));
 
       return res.json(device);
     } catch (error: any) {
       console.log(error);
+
       return next(ApiError.badRequest(error.message));
     }
   }
@@ -74,15 +75,17 @@ class DeviceController {
     console.log(req.body);
     // @ts-ignore
     const { img } = req.files;
-    let fileName = uuid.v4() + ".jpg";
+    let fileName = v4() + ".jpg";
     img.mv(path.resolve(__dirname, "..", "static", fileName));
-    
-    if (req.body.img) {
-      unlink(path.resolve(__dirname, "..", "static", req.body.img), () => {
-        console.log("delete file with name", req.body.img);
+    if (img) {
+      const oldImg = await Device.findImage(req.body.id);
+      console.log(oldImg);
+      
+      unlink(path.resolve(__dirname, "..", "static", oldImg.img), () => {
+        console.log("delete file with name", oldImg.img);
       });
     }
-    const updatedDevice = await Device.update(req.body);
+    const updatedDevice = await Device.update({...req.body, img:fileName});
     return res.json(updatedDevice);
   }
   async delete(req: Request, res: Response, next: NextFunction) {

@@ -25,7 +25,7 @@ class UserModel {
   async findByEmail(email: string) {
     return (
       await pool.query(
-        `SELECT email,role,password,id FROM users WHERE email = '${email}' RETURNING id,email;`
+        `SELECT email,role,password,id FROM users WHERE email = '${email}' ;`
       )
     ).rows[0];
   }
@@ -35,7 +35,7 @@ class UserModel {
   async create(body: IUserCreation) {
     return (
       await pool.query(
-        `INSERT INTO users (email,password,role) VALUES ('${body.email}','${body.password}','${body.role}') RETURNING email, password, role;`
+        `INSERT INTO users (email,password,role) VALUES ('${body.email}','${body.password}','${body.role}') RETURNING email, password, role, id;`
       )
     ).rows[0];
   }

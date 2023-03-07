@@ -6,11 +6,16 @@ export type OptionsType = {
 export const generateOptionsQuery = (options: OptionsType) => {
   let str = "";
   if (options.where) {
-    str+="WHERE "
+    str += "WHERE ";
     let whereKeys = Object.keys(options.where);
-    whereKeys.map((item) => {
-      // @ts-ignore
-      str += `${item} = '${options.where[item]}' `;
+    whereKeys.map((item, index) => {
+      if (index + 1 === whereKeys.length) {
+        // @ts-ignore
+        str += `${item} = '${options.where[item]}' `;
+      }else{
+         // @ts-ignore
+         str += `${item} = '${options.where[item]}' AND `;
+      }
     });
   }
   if (options.limit) {

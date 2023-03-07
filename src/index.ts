@@ -1,3 +1,4 @@
+import { syncDB } from './db/sync';
 import { errorHandlerMiddleware } from './middlewares/errorHandleMiddleware';
 import { approuter } from "./routes/index";
 import { User } from "./models/user.model";
@@ -18,12 +19,12 @@ app.use("/static", express.static(path.join(__dirname, "static")));
 
 app.use("/api", approuter);
 //last middleware
-app.use(errorHandlerMiddleware)
+// app.use(errorHandlerMiddleware)
 
 const start = async () => {
   try {
     await dbConnect();
-    console.log(await User.findAll());
+    await syncDB()
     app.listen(port, () => {
       console.log("Server working on a port", port);
     });

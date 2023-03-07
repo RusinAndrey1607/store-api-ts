@@ -20,7 +20,7 @@ class BasketModel {
     ).rows[0];
   }
   async findByUserId(user_id: number) {
-    return (await pool.query(`SELECT * FROM basket WHERE user_id = ${user_id}`))
+    return (await pool.query(`SELECT * FROM baskets WHERE user_id = ${user_id}`))
       .rows[0];
   }
 }

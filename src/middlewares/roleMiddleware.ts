@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+
+interface JWTPayLoad {
+  role: string;
+  email: string;
+  id: number;
+  basket_id: number;
+}
 export interface UserRequest extends Request {
-  user: {
-    role: string;
-    email: string;
-    id: number;
-  };
+  user: JWTPayLoad;
 }
 export const RoleMiddleware = (role: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -17,10 +21,13 @@ export const RoleMiddleware = (role: string) => {
       if (!token) {
         return res.status(401).json({ message: "User isn't authorized" });
       }
-      // @ts-ignore
       const decoded = jwt.verify(token, process.env.JWT_SECRET || "JWT_SECRET");
+      // @ts-ignore
       if (decoded.role !== role) {
-        return res.status(401).json({ message: "User aren't allowe" });
+        // @ts-ignore
+        console.log(decoded.role, role);
+
+        return res.status(401).json({ message: "User aren't allowed" });
       }
       // @ts-ignore
       req.user = decoded;

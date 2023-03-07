@@ -4,13 +4,16 @@ class RatingModel {
   async createTable() {
     await pool.query(`CREATE TABLE IF NOT EXISTS ratings (
             id SERIAL PRIMARY KEY,
-            user_id INT UNIQUE,
+            user_id INT ,
             device_id INT,
             rate SMALLINT NOT NULL DEFAULT 0,
             FOREIGN KEY(user_id) REFERENCES users ON DELETE CASCADE,
             FOREIGN KEY(device_id) REFERENCES devices ON DELETE CASCADE
         );`);
     return;
+  }
+  async rateExists(body: { device_id: number; user_id: number}){
+    return !!( await pool.query(`SELECT * FROM ratings WHERE device_id=${body.device_id} AND user_id=${body.user_id}`)).rowCount
   }
   async create(body: { device_id: number; user_id: number; rate: number }) {
     return (
@@ -22,7 +25,7 @@ class RatingModel {
 
   async delete(user_id: number, device_id: number) {
     return await pool.query(
-      `DELETE FROM ratings WHERE user_id = ${user_id} device_id=${device_id};`
+      `DELETE FROM ratings WHERE user_id = ${user_id} AND device_id=${device_id};`
     );
   }
 }
