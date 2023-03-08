@@ -12,10 +12,10 @@ class TypeModel {
     return await pool.query(`DELETE FROM types WHERE id = ${id};`);
   }
   async findOne(id: number) {
-    return await pool.query(`SELECT id,name FROM types WHERE id = ${id};`);
+    return (await pool.query(`SELECT id,name FROM types WHERE id = ${id};`)).rows[0]
   }
   async findAll() {
-    return await pool.query(`SELECT id,name FROM types;`);
+    return (await pool.query(`SELECT id,name FROM types;`)).rows
   }
 
   async create(name: string) {

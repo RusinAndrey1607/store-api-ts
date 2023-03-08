@@ -12,10 +12,10 @@ class BrandModel {
       return await pool.query(`DELETE FROM brands WHERE id = ${id};`);
     }
     async findOne(id: number) {
-      return await pool.query(`SELECT id,name FROM brands WHERE id = ${id};`);
+      return (await pool.query(`SELECT id,name FROM brands WHERE id = ${id};`)).rows[0]
     }
     async findAll() {
-      return await pool.query(`SELECT id,name FROM brands;`);
+      return (await pool.query(`SELECT id,name FROM brands;`)).rows
     }
   
     async create(name: string) {

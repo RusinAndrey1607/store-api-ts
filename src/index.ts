@@ -19,7 +19,7 @@ app.use("/static", express.static(path.join(__dirname, "static")));
 
 app.use("/api", approuter);
 //last middleware
-// app.use(errorHandlerMiddleware)
+app.use(errorHandlerMiddleware)
 
 const start = async () => {
   try {

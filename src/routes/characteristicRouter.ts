@@ -6,7 +6,12 @@ export const characteristicRouter = Router();
 characteristicRouter.post(
   "/",
   RoleMiddleware("ADMIN"),
-  characteristiController.create
+  characteristiController.createCharacteristic
+);
+characteristicRouter.post(
+  "/value",
+  RoleMiddleware("ADMIN"),
+  characteristiController.createValue
 );
 characteristicRouter.post(
   "/add",
@@ -23,3 +28,4 @@ characteristicRouter.get(
   RoleMiddleware("ADMIN"),
   characteristiController.getAllValues
 );
+characteristicRouter.get("/:id",characteristiController.getCharacteristicsWithValues)
